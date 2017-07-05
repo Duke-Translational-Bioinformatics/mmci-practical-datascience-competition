@@ -1,0 +1,132 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<body>
+<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+<h2>MMCi 517 Machine Learning Studio: Competition</h2>
+
+{% verbatim %}
+<div ng-app="sheetApp" ng-controller="GoogleItemsCtrl">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th colspan="3" class="center">
+            <div style="position:relative">
+              <h4>Data Scientists Participating <span class="badge badge-inverse align-top">{{ sheetdata.length }}</span></h4>
+            </div>
+          </th>
+        </tr>
+        <tr>
+          <th>Experiment ID</th>
+          <th>Retrieved</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr ng-repeat="obj in sheetdata">
+          <td>
+            <!--<a href="#/experiments/{{ exp_id }}" ng-if="exp.retrieved">{{ exp_id }}</a>-->
+            <!--<span ng-if="!exp.retrieved">{{ exp_id }}</span>-->
+            <span>{{ obj.datascientist }}</span>
+          </td>
+          <td>
+            <span ng-if="obj.retrieved">{{ obj.auc }}</span>
+            <span ng-if="!obj.retrieved && !obj.retrieving"><a href ng-click="score_participant(obj)">Retrieve</a></span>
+            <span ng-if="obj.retrieving"><i>Retrieving...</i></span>
+            <!--<img ng-if="obj.retrieving" src="../static/whirligig.gif">-->
+
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+</div>
+{% endverbatim %}
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js'></script>
+<script src="{% static '/js/angular-resource.js' %}"></script>
+
+<script type='text/javascript'>
+//  var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1HAn2Tl8TEsYmehRPeXEmfQ5LdIsIDXjIHVMJzj868Rw/pubhtml';
+//
+//  function init() {
+//    Tabletop.init( { key: publicSpreadsheetUrl,
+//                     callback: showInfo,
+//                     simpleSheet: true } )
+//  }
+//
+//  function showInfo(data, tabletop) {
+//    myData = data;
+//  }
+//
+//  window.addEventListener('DOMContentLoaded', init)
+
+var app = angular.module('sheetApp', ['ngResource']);
+
+app.controller('GoogleItemsCtrl', ['$scope', '$window', '$resource', '$q', 'SheetItems', 'Score2',
+  function ($scope, $window, $resource, $q, SheetItems, Score2) {
+
+    SheetItems.query(function(data) {
+      //data processing can happen here
+        $scope.sheetdata = data;
+    });
+
+    $scope.score_participant = (obj) => {
+        obj.retrieving = true;
+        payload = {"url":obj.url,
+        "apikey":obj.apikey,
+        "scoredvariablename":obj.scoredvariablename,
+        "datascientist":obj.datascientist};
+        auc_results = Score2.save(payload, (data) => {
+          obj.retrieving = false;
+          obj.retrieved = true;
+          obj.auc = data.auc;
+        }, function(error) {
+            console.log(error);
+            obj.retrieving = false;
+            obj.retrieved = false;
+            $window.alert(error);
+        }
+    )}
+
+}]);
+
+app.factory(
+    'Score2',
+    function ($resource) {
+        return $resource(
+            '/azure',
+            {},
+            {}
+        );
+    }
+)
+
+app.factory('SheetItems', ['$rootScope',
+  function($rootScope){
+    return {
+      query: function(callback) {
+        Tabletop.init({
+          key: 'https://docs.google.com/spreadsheets/d/1HAn2Tl8TEsYmehRPeXEmfQ5LdIsIDXjIHVMJzj868Rw/pubhtml',
+          simpleSheet: true,
+          parseNumbers: true,
+          callback: function(data, tabletop) {
+            if(callback && typeof(callback) === "function") {
+              $rootScope.$apply(function() {
+                callback(data);
+              });
+            }
+          }
+        });
+      }
+    };
+  }]);
+
+
+</script>
+
+</body>
+</html>

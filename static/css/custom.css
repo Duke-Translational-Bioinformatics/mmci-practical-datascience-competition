@@ -1,0 +1,227 @@
+body {
+  margin: 0;
+  font-family: "Open Sans", "Lucida Grande", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 20px;
+  color: #444444;
+  background-color: #ffffff;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+font-weight: bold;
+}
+
+button > i {
+    vertical-align: top;
+    font-size: 18px;
+    opacity: 0.8;
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+  display: inline-block;
+  padding: 4px 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #555;
+  border: 1px solid #ccc !important;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+
+input[type="text"].ui-select-search {
+  border: 0 !important;
+}
+
+label {
+  font-weight: 500;
+}
+
+.lead {
+  margin-bottom: 9px;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+hr {
+  margin: 12px 0;
+  border: 0;
+  border-top: 1px solid #dddddd;
+}
+
+/* For forcing breaks in very long words */
+.break-word {
+  word-wrap: break-word;
+}
+
+.navbar {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  overflow: visible;
+  height: 58px;
+  margin-bottom: 0;
+  *position: relative;
+  *z-index: 2;
+  *zoom: 1;
+}
+
+.navbar-brand {
+  float: left;
+  display: block;
+  padding: 9px 20px;
+  margin-left: -20px;
+}
+
+.navbar-link, .navbar-inverse .navbar-text {
+  font-size: 12px;
+  color: #aaa;
+}
+
+p.navbar-text {
+  margin-top: 9px;
+}
+
+@media (min-width: 1400px) {
+  .container,
+  .navbar-static-top .container,
+  .navbar-fixed-top .container,
+  .navbar-fixed-bottom .container {
+    width: 1370px;
+  }
+}
+
+/* ----------  Sticky footer START  ---------- */
+html, body, #wrap {
+  height: 100%;
+}
+
+body > #wrap {height: auto; min-height: 100%;}
+
+#main {
+  padding-top: 0;
+  padding-bottom: 32px;
+}
+
+#footer {
+  position: relative;
+  margin-top: -30px;
+  padding-top: 5px;
+  border-top: 1px solid #dddddd;
+  height: 24px;
+  width: 100%;
+  text-align: center;
+  color: #6c717b;
+  font-size: 11px;
+}
+/* ----------  Sticky footer END  ---------- */
+/* ----------  Custom Table stuff START  ---------- */
+tbody > tr > td {
+  border: none !important;
+}
+
+td {
+  vertical-align: middle !important;
+}
+td.center {
+  text-align: center;
+}
+th.center {
+  text-align: center;
+}
+/* ----------  Custom Table stuff END  ---------- */
+
+/* ----------  Login stuff START  ---------- */
+#login-box {
+  width: 350px;
+  margin: auto;
+}
+
+.form-signin {
+  padding: 30px;
+  margin: 0;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.form-signin input[type="text"],
+.form-signin input[type="password"] {
+  font-size: 16px;
+  height: auto;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 7px 9px;
+}
+
+.form-signin button {
+  font-size: 18px;
+  height: auto;
+  padding: 7px 9px;
+  width: 100%;
+}
+/* ----------  Login stuff   END---------- */
+.align-top {
+  vertical-align: top;
+}
+.align-middle {
+  vertical-align: middle !important;
+}
+.no-wrap {
+  white-space: nowrap;
+}
+
+/* ----------- Color Square -------------- */
+.color-square {
+  float: left;
+  width: 11px;
+  height: 11px;
+  margin: 3px;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.green {
+  background: limegreen;
+}
+
+.white {
+  background: white;
+}
+
+.red {
+  background: red;
+}
+
+/* ----------- Vertical margins ----------- */
+.margin-top-5 {
+  margin-top: 5px;
+}
+
+.margin-bottom-5 {
+  margin-bottom: 5px;
+}
