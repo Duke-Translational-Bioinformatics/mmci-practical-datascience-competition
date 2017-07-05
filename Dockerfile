@@ -1,4 +1,4 @@
-FROM python:3
+FROM continuumio/anaconda3
 MAINTAINER Ben Neely <nigelneely@gmail.com>
 ADD requirements.txt /requirements.txt
 RUN pip install -r requirements.txt

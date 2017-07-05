@@ -44,9 +44,8 @@ def _check_err(request_object):
     """
     if request_object.status_code > 300:
         raise ValueError(request_object.text)
-        return request_object.text
     else:
-        request_object
+        return request_object
 
 
 def get_model_results(api_key, url, response_variable_prediction, output_name):
