@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 *.DS_Store
 *.idea/
+production.env
+competition/settings.py
 
 # C extensions
 *.so

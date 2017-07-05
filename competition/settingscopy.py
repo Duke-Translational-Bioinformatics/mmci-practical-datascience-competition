@@ -15,18 +15,15 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
+DEBUG = os.environ.get('DEBUG', 'on') == 'on'
+SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(32))
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'eevi2z@wawryavj(-$5)f!(er4pwhwr+ovmnjcgtvt_y**pn2('
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
+STATIC_ROOT = BASE_DIR + '/comp-static/'
 
 # Application definition
 
@@ -37,6 +34,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_swagger'
 ]
 
 MIDDLEWARE = [

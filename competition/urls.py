@@ -16,7 +16,14 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.views.generic.base import TemplateView
+from rest_framework_swagger.views import get_swagger_view
+from backend import views
+
+schema_view = get_swagger_view(title='Machine Learning Competition')
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='index.html'), name="home"),
+    url(r'^docs/', schema_view),
+    url(r'^api/azure/$', views.ScoreData.as_view()),
+
 ]
