@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic.base import TemplateView
 from rest_framework_swagger.views import get_swagger_view
 from backend import views
@@ -27,3 +27,5 @@ urlpatterns = [
     url(r'^api/azure/$', views.ScoreData.as_view()),
 
 ]
+
+urlpatterns += staticfiles_urlpatterns()
