@@ -88,7 +88,7 @@ app.controller('GoogleItemsCtrl', ['$scope', '$window', '$resource', '$q', 'Shee
             console.log(error);
             obj.retrieving = false;
             obj.retrieved = false;
-            $window.alert(error);
+            $window.alert(JSON.stringify(error, null, 4));
         }
     )}
 

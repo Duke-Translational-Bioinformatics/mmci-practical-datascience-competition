@@ -1,9 +1,4 @@
-from django.shortcuts import render
-
-# Create your views here.
-
 from rest_framework.views import APIView
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 import re
 import json
@@ -14,6 +9,33 @@ import time
 import pandas as pd
 import numpy as np
 import os
+from rest_framework.exceptions import APIException
+
+
+class CustomException(APIException):
+
+    def __init__(self, request):
+        """
+        A custom Django Rest Framework exception to pass request failures through the endpoint /api/azure/
+        :param request: requests.models.Response
+        """
+        self.status_code = request.status_code
+        self.default_code = request.reason
+        self.default_detail = request.text
+        self.code = request.reason
+        self.detail = json.loads(request.text)
+
+class NoInputException(APIException):
+    status_code = 400
+    default_code = 'Bad Request'
+    default_detail = 'All fields in Google Sheets must be complete'
+
+
+class NoResponsewithResponseException(APIException):
+    status_code = 409
+    default_code = 'Conflict'
+    default_detail = 'Your model contains the predictor variable readmitted, please remove and rerun'
+
 
 class ScoreData(APIView):
     """
@@ -27,6 +49,11 @@ class ScoreData(APIView):
         :return:
         """
         inputtt = request.data
+        if ((inputtt['apikey'] == '') or
+                (inputtt['url'] == '') or
+                (inputtt['scoredvariablename'] == '') or
+                (inputtt['datascientist'] == '')):
+            raise NoInputException()
         api_key = inputtt['apikey']
         url = inputtt['url']
         rvp = inputtt['scoredvariablename']
@@ -43,12 +70,15 @@ def _check_err(request_object):
     :return: request response
     """
     if request_object.status_code > 300:
-        raise ValueError(request_object.text)
+        raise CustomException(request_object)
     else:
         return request_object
 
 
-def get_model_results(api_key, url, response_variable_prediction, output_name):
+def get_model_results(api_key=None,
+                      url=None,
+                      response_variable_prediction=None,
+                      output_name=None):
     """
     A utility function that takes as input, microsoft azure learning studio model criteria and returns an auc with
     the held back data.
@@ -104,11 +134,10 @@ def get_model_results(api_key, url, response_variable_prediction, output_name):
         elif (status == 1 or status == "Running"):
             print("Job " + job_id + " running...")
         elif (status == 2 or status == "Failed"):
-            print("Job " + job_id + " failed!")
-            print("Error details: " + result["Details"])
+            CustomException(req)
             break
         elif (status == 3 or status == "Cancelled"):
-            print("Job " + job_id + " cancelled!")
+            CustomException(req)
             break
         elif (status == 4 or status == "Finished"):
             print("Job " + job_id + " finished!")
@@ -133,6 +162,10 @@ def get_model_results(api_key, url, response_variable_prediction, output_name):
             rawData = rawData[~rawData[response_variable_prediction].isnull()]
         auc = metrics.roc_auc_score(np.asarray(rawData['admitted']),
                                                  np.asarray(rawData[response_variable_prediction]))
+
+
+        if int(auc) == 1:
+            raise NoResponsewithResponseException()
 
         output = {
             'job_id': job_id,
