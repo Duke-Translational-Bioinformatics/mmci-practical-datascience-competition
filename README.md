@@ -13,7 +13,7 @@ docker build -t mmci .
 docker run -d \
 --env-file=production.env \
 -p 8000:8000 \
--v $(pwd):/ihc-image-analysis \
+-v $(pwd):/mmci-practical-datascience-competition \
 --restart always \
 mmci 
   
