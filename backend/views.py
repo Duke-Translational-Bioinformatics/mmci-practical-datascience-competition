@@ -34,7 +34,7 @@ class NoInputException(APIException):
 class NoResponsewithResponseException(APIException):
     status_code = 409
     default_code = 'Conflict'
-    default_detail = 'Your model contains the predictor variable readmitted, please remove and rerun'
+    default_detail = 'It appears that your model contains the predictor variable readmitted, please remove and rerun'
 
 
 class ScoreData(APIView):
@@ -58,7 +58,7 @@ class ScoreData(APIView):
         url = inputtt['url']
         rvp = inputtt['scoredvariablename']
         ds = inputtt['datascientist']
-        output_name = re.sub(r'\s+', '', ds).lower() + ".csv"
+        output_name = re.sub(r'\s+', '', re.sub('[^A-Za-z\.]+', ' ', ds)).lower() + ".csv"
         results = get_model_results(api_key, url, rvp, output_name)
         print(results)
         return Response(results)
@@ -164,7 +164,8 @@ def get_model_results(api_key=None,
                                                  np.asarray(rawData[response_variable_prediction]))
 
 
-        if int(auc) == 1:
+        if auc > 0.95:
+            print(auc)
             raise NoResponsewithResponseException()
 
         output = {
