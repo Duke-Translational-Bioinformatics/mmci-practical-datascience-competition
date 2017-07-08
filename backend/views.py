@@ -37,6 +37,12 @@ class NoResponsewithResponseException(APIException):
     default_detail = 'It appears that your model contains the predictor variable readmitted, please remove and rerun'
 
 
+class MultipleModelNoSupportException(APIException):
+    status_code = 409
+    default_code = 'Conflict'
+    default_detail = 'It appears that your web service exposes more than one model, please expose only one model'
+
+
 class ScoreData(APIView):
     """
     Endpoint to send user submitted model through to Azure
@@ -145,7 +151,7 @@ def get_model_results(api_key=None,
         time.sleep(1)
     results = result["Results"]
     if len(results) > 1:
-        raise ValueError('Scored procedure returns >1 results file, need a refactor to account for this')
+        raise MultipleModelNoSupportException()
     for outputName in results:
         result_blob_location = results[outputName]
         sas_token = result_blob_location["SasBlobToken"]
